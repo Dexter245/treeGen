@@ -11,8 +11,8 @@ public class Tree {
 
     }
 
-    public void addLayer(int length, int numBranches, int angle){
-        layers.add(new Layer(length, numBranches, angle));
+    public void addLayer(float length, float width, float numBranches, float angle){
+        layers.add(new Layer(length, width, numBranches, angle));
     }
 
     public Layer getLayer(int i){

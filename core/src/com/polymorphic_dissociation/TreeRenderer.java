@@ -38,7 +38,7 @@ public class TreeRenderer {
 
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.line(0f, viewport.y *0.5f, viewport.x, viewport.y *0.5f);
         shapeRenderer.line(viewport.x *0.5f, 0, viewport.x *0.5f, viewport.y);
         shapeRenderer.setColor(Color.BLACK);
@@ -49,17 +49,19 @@ public class TreeRenderer {
         Layer layer = null;
         bottoms.add(startPos);
 
-        float cos, sin , angle = 0;
+        float cos = 0f, sin = 0f, angle = 0f, width = 0f;
         System.out.println("num layers: " + tree.getNumLayers());
 
-        for(int k = 0; k < tree.getNumLayers(); k++){
+        for(int k = 0; k < tree.getNumLayers(); k++){//each layer
 
             layer = tree.getLayer(k);
+            width = layer.getWidth();
+
             System.out.println("current layer: " + layer + ", bottoms.size: " + bottoms.size());
 
-            for(int j = 0; j < bottoms.size(); j++){
+            for(int j = 0; j < bottoms.size(); j++){//each branching
 
-                for(int i = 0; i < layer.getNumBranches(); i++){
+                for(int i = 0; i < layer.getNumBranches(); i++){//each branch
                     if(i == 0)
                         if(layer.getNumBranches() >= 2)
                             angle = (layer.getNumBranches()-1)*layer.getAngle()*0.5f + 90;
@@ -69,12 +71,12 @@ public class TreeRenderer {
                         angle -= layer.getAngle();
                     cos = (float) Math.cos(Math.toRadians(angle));
                     sin = (float) Math.sin(Math.toRadians(angle));
-                    top.set((int) (bottoms.get(j).x + layer.getLength() * cos),
-                            (int) (bottoms.get(j).y + layer.getLength() * sin));
+                    top.set(bottoms.get(j).x + layer.getLength() * cos, bottoms.get(j).y + layer.getLength() * sin);
                     tops.add(new Vector2(top));
                     System.out.println("angle: " + angle + ", bottom: " + bottoms.get(j) + ", top: " + top +
                             ", tops.size: " + tops.size());
-                    shapeRenderer.line(bottoms.get(j).x, bottoms.get(j).y, top.x, top.y);
+//                    shapeRenderer.line(bottoms.get(j).x, bottoms.get(j).y, top.x, top.y);
+                    shapeRenderer.rectLine(bottoms.get(j), top, width);
                 }
 
             }

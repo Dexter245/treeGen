@@ -22,10 +22,10 @@ public class treeGen extends ApplicationAdapter {
 //	    System.out.println("camera.width: " + camera.viewportWidth + ", camera.height: " + camera.viewportHeight);
 		treeRenderer = new TreeRenderer(camera);
 		tree = new Tree();
-		tree.addLayer(200, 1, 0);
-        tree.addLayer(100, 3, 40);
-        tree.addLayer(50, 5, 20);
-        tree.addLayer(25, 1, 90);
+		tree.addLayer(150, 10, 1, 0);
+        tree.addLayer(100, 5, 3, 40);
+        tree.addLayer(50, 3, 5, 20);
+        tree.addLayer(25, 2, 7, 20);
 	}
 
 	@Override
