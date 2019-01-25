@@ -4,18 +4,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 
 public class TreeRenderer {
 
     private OrthographicCamera camera;
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
-    private float viewportWidth = 0f;
-    private float viewportHeight = 0f;
+    private Vector2 viewport;
 
     public TreeRenderer(OrthographicCamera camera){
         this.camera = camera;
-        viewportWidth = camera.viewportWidth;
-        viewportHeight = camera.viewportHeight;
+        viewport = new Vector2(camera.viewportWidth, camera.viewportHeight);
 
     }
 
@@ -28,10 +27,9 @@ public class TreeRenderer {
 
     }
 
-    public void drawTree(Tree tree, float startPosX, float startPosY){
+    public void drawTree(Tree tree, Vector2 startPos){
 
-        viewportWidth = camera.viewportWidth;
-        viewportHeight = camera.viewportHeight;
+        viewport.set(camera.viewportWidth, camera.viewportHeight);
 //        System.out.println("viewportWidth: " + viewportWidth + ", viewportHeight: " + viewportHeight);
 //        System.out.println("startPosX: " + startPosX + ", startPosY: " + startPosY);
 
@@ -40,21 +38,19 @@ public class TreeRenderer {
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.setColor(Color.WHITE);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.line(0f, viewportHeight *0.5f, viewportWidth, viewportHeight *0.5f);
-        shapeRenderer.line(viewportWidth *0.5f, 0, viewportWidth *0.5f, viewportHeight);
+        shapeRenderer.line(0f, viewport.y *0.5f, viewport.x, viewport.y *0.5f);
+        shapeRenderer.line(viewport.x *0.5f, 0, viewport.x *0.5f, viewport.y);
         shapeRenderer.setColor(Color.BLACK);
 
         //first line
-        float bottomX = startPosX;
-        float bottomY = startPosY;
+        Vector2 bottom = new Vector2(startPos);
         float angle = (layer.getNumBranches()-1)*layer.getAngle()*0.5f + 90;
         System.out.println("startAngle. " + angle);
         float cos = (float) Math.cos(Math.toRadians(angle));
         float sin = (float) Math.sin(Math.toRadians(angle));
-        float topX = bottomX + layer.getLength() * cos;
-        float topY = bottomY + layer.getLength() * sin;
-        System.out.println("bottomX: " + bottomX + ", bottomY: " + bottomY + ", topX: " + topX + ", topY: " + topY);
-        shapeRenderer.line(bottomX, bottomY, topX, topY);
+        Vector2 top = new Vector2(bottom.x + layer.getLength() * cos, bottom.y + layer.getLength() * sin);
+        System.out.println("bottom: " + bottom + ", top: " + top);
+        shapeRenderer.line(bottom.x, bottom.y, top.x, top.y);
 
         //other lines
         for(int i = 1; i < layer.getNumBranches(); i++){
@@ -62,10 +58,10 @@ public class TreeRenderer {
             System.out.println("startAngle. " + angle);
             cos = (float) Math.cos(Math.toRadians(angle));
             sin = (float) Math.sin(Math.toRadians(angle));
-            topX = bottomX + layer.getLength() * cos;
-            topY = bottomY + layer.getLength() * sin;
-            System.out.println("bottomX: " + bottomX + ", bottomY: " + bottomY + ", topX: " + topX + ", topY: " + topY);
-            shapeRenderer.line(bottomX, bottomY, topX, topY);
+            top.x = bottom.x + layer.getLength() * cos;
+            top.y = bottom.y + layer.getLength() * sin;
+            System.out.println("bottom: " + bottom + ", top: " + top);
+            shapeRenderer.line(bottom.x, bottom.y, top.x, top.y);
         }
 
         shapeRenderer.end();

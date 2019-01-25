@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 public class treeGen extends ApplicationAdapter {
 
@@ -34,7 +35,7 @@ public class treeGen extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 //        treeRenderer.drawTest();
 //        treeRenderer.drawTree(tree, Gdx.graphics.getWidth()*0.5f, 100f);
-        treeRenderer.drawTree(tree, Gdx.graphics.getWidth()*0.5f, Gdx.graphics.getHeight()*0.5f);
+        treeRenderer.drawTree(tree, new Vector2(Gdx.graphics.getWidth()*0.5f, Gdx.graphics.getHeight()*0.5f));
 	}
 	
 	@Override
