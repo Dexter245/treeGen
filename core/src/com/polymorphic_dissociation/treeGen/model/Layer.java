@@ -1,10 +1,10 @@
-package com.polymorphic_dissociation;
+package com.polymorphic_dissociation.treeGen.model;
 
 public class Layer {
-    private float length = 0f;
-    private float width = 0f;
-    private float numBranches = 0f;
-    private float angle = 0f;
+    private float length;
+    private float width;
+    private float numBranches;
+    private float angle;
 
     public Layer(float length, float width, float numBranches, float angle){
         this.length = length;

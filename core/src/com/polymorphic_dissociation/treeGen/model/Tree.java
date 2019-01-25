@@ -1,4 +1,4 @@
-package com.polymorphic_dissociation;
+package com.polymorphic_dissociation.treeGen.model;
 
 import java.util.ArrayList;
 import java.util.List;

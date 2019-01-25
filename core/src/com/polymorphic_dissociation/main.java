@@ -2,14 +2,13 @@ package com.polymorphic_dissociation;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.polymorphic_dissociation.treeGen.model.Tree;
+import com.polymorphic_dissociation.treeGen.view.TreeRenderer;
 
-public class treeGen extends ApplicationAdapter {
+public class main extends ApplicationAdapter {
 
     private OrthographicCamera camera;
 	private TreeRenderer treeRenderer;
@@ -19,7 +18,6 @@ public class treeGen extends ApplicationAdapter {
 	public void create () {
 	    camera = new OrthographicCamera();
 	    camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//	    System.out.println("camera.width: " + camera.viewportWidth + ", camera.height: " + camera.viewportHeight);
 		treeRenderer = new TreeRenderer(camera);
 		tree = new Tree();
 		tree.addLayer(150, 10, 1, 0);
@@ -32,12 +30,9 @@ public class treeGen extends ApplicationAdapter {
 	public void render () {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
-//        System.out.println("camera.width: " + camera.viewportWidth + ", camera.height: " + camera.viewportHeight);
 
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        treeRenderer.drawTest();
-//        treeRenderer.drawTree(tree, Gdx.graphics.getWidth()*0.5f, 100f);
         treeRenderer.drawTree(tree, new Vector2(Gdx.graphics.getWidth()*0.5f, Gdx.graphics.getHeight()*0.5f));
 	}
 	
