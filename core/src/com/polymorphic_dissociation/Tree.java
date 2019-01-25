@@ -22,4 +22,8 @@ public class Tree {
             throw new IllegalArgumentException("There are only" + (layers.size()+1) + " layers. Can't get layer " + i + ".");
     }
 
+    public int getNumLayers(){
+        return layers.size();
+    }
+
 }

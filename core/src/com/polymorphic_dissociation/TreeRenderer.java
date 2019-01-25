@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TreeRenderer {
 
     private OrthographicCamera camera;
@@ -33,8 +36,6 @@ public class TreeRenderer {
 //        System.out.println("viewportWidth: " + viewportWidth + ", viewportHeight: " + viewportHeight);
 //        System.out.println("startPosX: " + startPosX + ", startPosY: " + startPosY);
 
-        Layer layer = tree.getLayer(0);
-
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.setColor(Color.WHITE);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -42,29 +43,48 @@ public class TreeRenderer {
         shapeRenderer.line(viewport.x *0.5f, 0, viewport.x *0.5f, viewport.y);
         shapeRenderer.setColor(Color.BLACK);
 
-        //first line
-        Vector2 bottom = new Vector2(startPos);
-        float angle = (layer.getNumBranches()-1)*layer.getAngle()*0.5f + 90;
-        System.out.println("startAngle. " + angle);
-        float cos = (float) Math.cos(Math.toRadians(angle));
-        float sin = (float) Math.sin(Math.toRadians(angle));
-        Vector2 top = new Vector2(bottom.x + layer.getLength() * cos, bottom.y + layer.getLength() * sin);
-        System.out.println("bottom: " + bottom + ", top: " + top);
-        shapeRenderer.line(bottom.x, bottom.y, top.x, top.y);
+        List<Vector2> bottoms = new ArrayList<Vector2>();
+        List<Vector2> tops = new ArrayList<Vector2>();
+        Vector2 top = new Vector2();
+        Layer layer = null;
+        bottoms.add(startPos);
 
-        //other lines
-        for(int i = 1; i < layer.getNumBranches(); i++){
-            angle -= layer.getAngle();
-            System.out.println("startAngle. " + angle);
-            cos = (float) Math.cos(Math.toRadians(angle));
-            sin = (float) Math.sin(Math.toRadians(angle));
-            top.x = bottom.x + layer.getLength() * cos;
-            top.y = bottom.y + layer.getLength() * sin;
-            System.out.println("bottom: " + bottom + ", top: " + top);
-            shapeRenderer.line(bottom.x, bottom.y, top.x, top.y);
+        float cos, sin , angle = 0;
+        System.out.println("num layers: " + tree.getNumLayers());
+
+        for(int k = 0; k < tree.getNumLayers(); k++){
+
+            layer = tree.getLayer(k);
+            System.out.println("current layer: " + layer + ", bottoms.size: " + bottoms.size());
+
+            for(int j = 0; j < bottoms.size(); j++){
+
+                for(int i = 0; i < layer.getNumBranches(); i++){
+                    if(i == 0)
+                        angle = (layer.getNumBranches()-1)*layer.getAngle()*0.5f + 90;
+                    else
+                        angle -= layer.getAngle();
+                    cos = (float) Math.cos(Math.toRadians(angle));
+                    sin = (float) Math.sin(Math.toRadians(angle));
+                    top.set((int) (bottoms.get(j).x + layer.getLength() * cos),
+                            (int) (bottoms.get(j).y + layer.getLength() * sin));
+                    tops.add(new Vector2(top));
+                    System.out.println("angle: " + angle + ", bottom: " + bottoms.get(j) + ", top: " + top +
+                            ", tops.size: " + tops.size());
+                    shapeRenderer.line(bottoms.get(j).x, bottoms.get(j).y, top.x, top.y);
+                }
+
+            }
+
+//            bottoms = tops;
+            bottoms = new ArrayList<Vector2>(tops);
+            tops = new ArrayList<Vector2>();
+
         }
 
+
         shapeRenderer.end();
+        System.out.println("");
 
     }
 

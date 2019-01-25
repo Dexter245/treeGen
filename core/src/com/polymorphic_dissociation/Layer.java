@@ -22,4 +22,9 @@ public class Layer {
     public float getAngle(){
         return angle;
     }
+
+    @Override
+    public String toString() {
+        return "length: " + length + ", numBranches: " + numBranches + ", angle: " + angle;
+    }
 }
