@@ -61,7 +61,10 @@ public class TreeRenderer {
 
                 for(int i = 0; i < layer.getNumBranches(); i++){
                     if(i == 0)
-                        angle = (layer.getNumBranches()-1)*layer.getAngle()*0.5f + 90;
+                        if(layer.getNumBranches() >= 2)
+                            angle = (layer.getNumBranches()-1)*layer.getAngle()*0.5f + 90;
+                        else
+                            angle = layer.getAngle() + 90;
                     else
                         angle -= layer.getAngle();
                     cos = (float) Math.cos(Math.toRadians(angle));
