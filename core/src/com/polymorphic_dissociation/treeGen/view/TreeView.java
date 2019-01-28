@@ -1,53 +1,67 @@
 package com.polymorphic_dissociation.treeGen.view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.polymorphic_dissociation.treeGen.model.Layer;
 import com.polymorphic_dissociation.treeGen.model.Tree;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TreeRenderer {
+public class TreeView {
 
-    private OrthographicCamera camera;
+    private Viewport viewport;
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
-    private Vector2 viewport;
+    private Tree tree;
+    private Vector2 rootPos;
 
-    public TreeRenderer(OrthographicCamera camera){
-        this.camera = camera;
-        viewport = new Vector2(camera.viewportWidth, camera.viewportHeight);
+    public TreeView(Viewport viewport, Tree tree, Vector2 rootPos){
+        this.viewport = viewport;
+        this.tree = tree;
+        this.rootPos = rootPos;
 
     }
 
-    public void drawTree(Tree tree, Vector2 startPos){
+    public void render(){
 
-        viewport.set(camera.viewportWidth, camera.viewportHeight);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        shapeRenderer.setProjectionMatrix(camera.combined);
+        viewport.apply(true);
+        shapeRenderer.setProjectionMatrix(viewport.getCamera().combined);
         shapeRenderer.setColor(Color.WHITE);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.line(0f, viewport.y *0.5f, viewport.x, viewport.y *0.5f);
-        shapeRenderer.line(viewport.x *0.5f, 0, viewport.x *0.5f, viewport.y);
-        shapeRenderer.setColor(Color.BLACK);
+        shapeRenderer.rectLine(0f, rootPos.y, viewport.getScreenWidth(),
+                rootPos.y, 1f);
+        shapeRenderer.rectLine(viewport.getScreenWidth() *0.5f, 0, viewport.getScreenWidth() *0.5f,
+                viewport.getScreenHeight(), 1f);
+        shapeRenderer.setColor(Color.RED);
 
         List<Vector2> bottoms = new ArrayList<Vector2>();
         List<Vector2> tops = new ArrayList<Vector2>();
         Vector2 top = new Vector2();
         Layer layer;
-        bottoms.add(startPos);
+        bottoms.add(rootPos);
 
         float cos, sin, width, angle = 0f;
-        System.out.println("num layers: " + tree.getNumLayers());
+//        System.out.println("num layers: " + tree.getNumLayers());
+
+        int numLines = 0;
 
         for(int i = 0; i < tree.getNumLayers(); i++){//each layer
+
+            shapeRenderer.setColor(0f, 0f, 0f, 1f - 0.25f*i);
+//            shapeRenderer.getRenderer().tra
 
             layer = tree.getLayer(i);
             width = layer.getWidth();
 
-            System.out.println("current layer: " + layer + ", bottoms.size: " + bottoms.size());
+//            System.out.println("current layer: " + layer + ", bottoms.size: " + bottoms.size());
 
             for(Vector2 bottom : bottoms){//each branching
                 for(int k = 0; k < layer.getNumBranches(); k++){//each branch
@@ -62,9 +76,10 @@ public class TreeRenderer {
                     sin = (float) Math.sin(Math.toRadians(angle));
                     top.set(bottom.x + layer.getLength() * cos, bottom.y + layer.getLength() * sin);
                     tops.add(new Vector2(top));
-                    System.out.println("angle: " + angle + ", bottom: " + bottom + ", top: " + top +
-                            ", tops.size: " + tops.size());
+//                    System.out.println("angle: " + angle + ", bottom: " + bottom + ", top: " + top +
+//                            ", tops.size: " + tops.size());
                     shapeRenderer.rectLine(bottom, top, width);
+                    numLines++;
                 }
 
             }
@@ -74,10 +89,15 @@ public class TreeRenderer {
 
         }
 
+        System.out.println("numLines: " + numLines);
 
         shapeRenderer.end();
-        System.out.println();
+//        System.out.println();
 
+    }
+
+    public void setRootPos(Vector2 pos){
+        rootPos = pos;
     }
 
     public void dispose(){

@@ -13,20 +13,36 @@ public class Layer {
         this.angle = angle;
     }
 
-    public float getLength(){
+    public float getLength() {
         return length;
     }
 
-    public float getNumBranches(){
+    public void setLength(float length) {
+        this.length = length;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    public float getNumBranches() {
         return numBranches;
     }
 
-    public float getAngle(){
+    public void setNumBranches(float numBranches) {
+        this.numBranches = numBranches;
+    }
+
+    public float getAngle() {
         return angle;
     }
 
-    public float getWidth(){
-        return width;
+    public void setAngle(float angle) {
+        this.angle = angle;
     }
 
     @Override
